@@ -1,10 +1,12 @@
+import datetime
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
 
-from conf_web.models import Rooms
+from conf_web.models import Rooms, RoomReservations
 
 
 class AddRooms(View):
@@ -36,6 +38,9 @@ class AllRooms(View):
     def get(self, request):
         rooms = Rooms.objects.order_by('id')
         if rooms:
+            for room in rooms:
+                reservation_dates = [reservation.date for reservation in room.roomreservations_set.all()]
+                room.reserved = datetime.date.today() in reservation_dates
             return render(request, template_name='main.html', context={"middle": "allrooms.html", "rooms": rooms})
 
         return render(request, template_name='main.html',
@@ -101,5 +106,60 @@ class Reservation(View):
         except:
             return render(request, template_name='main.html',
                           context={'middle': 'info.html', 'info': 'Brak sali o tym id'})
+        reservations = room.roomreservations_set.filter(date__gte=str(datetime.date.today())).order_by('date')
+        return render(request, template_name="main.html", context={'middle': 'reservation.html', 'reservations': reservations})
 
-        return render(request, template_name="main.html", context={'middle': 'reservation.html'})
+
+    def post(self, request, room_id):
+        date = request.POST.get('date')
+        comment = request.POST.get('comment')
+        try:
+            room = Rooms.objects.get(id=room_id)
+        except:
+            return render(request, template_name='main.html',
+                          context={'middle': 'info.html', 'info': 'Brak sali o tym id'})
+        reservations = room.roomreservations_set.filter(date__gte=str(datetime.date.today())).order_by('date')
+        if not date:
+            return render(request, template_name="main.html",
+                          context={'middle': 'reservation.html', 'reservations': reservations, 'error': 'Wybierz datę'})
+        if date < str(datetime.date.today()):
+            return render(request, template_name="main.html",
+                          context={'middle': 'reservation.html', 'reservations': reservations, 'error': 'Data nie może być z przeszłości'})
+        if RoomReservations.objects.filter(room=room, date=date):
+            return render(request, template_name="main.html",
+                          context={'middle': 'reservation.html', 'reservations': reservations, 'error': 'Sala tego dnia jest zajęta'})
+        RoomReservations.objects.create(room=room, date=date,comment=comment)
+
+        return redirect("all-rooms")
+
+
+class RoomDetails(View):
+    def get(self, request, room_id):
+        try:
+            room = Rooms.objects.get(id=room_id)
+        except:
+            return render(request, template_name='main.html',
+                          context={'middle': 'info.html', 'info': 'Brak sali o tym id'})
+        reservations = room.roomreservations_set.filter(date__gte=str(datetime.date.today()))
+        return render(request, template_name="main.html",
+                          context={'middle': 'roomdetails.html', 'room': room, 'reservations': reservations})
+
+class Search(View):
+    def get(self, request):
+        room_name = request.GET.get('room_name')
+        room_cap = request.GET.get('room_cap')
+        room_cap = int(room_cap) if room_cap else 0
+        projector = request.GET.get('projector') == "on"
+
+        rooms = Rooms.objects.all()
+        if projector:
+            rooms = rooms.filter(projector=projector)
+        if room_cap:
+            rooms = rooms.filter(room_cap__gte=room_cap)
+        if room_name:
+            rooms = rooms.filter(room_name__contains=room_name)
+        for room in rooms:
+            reservation_dates = [reservation.date for reservation in room.roomreservations_set.all()]
+            room.reserved = datetime.date.today() in reservation_dates
+
+        return render(request, template_name='main.html', context={'middle': 'searchresults.html', 'rooms': rooms})

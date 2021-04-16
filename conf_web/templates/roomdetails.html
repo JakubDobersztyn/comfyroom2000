@@ -1,0 +1,17 @@
+<h2> Szczegóły sali {{room.room_name}}</h2>
+<table>
+  <tr>
+    <td><a href="/room/modify/{{room.id}}">Edytuj</td>
+    <td><a href="/room/delete/{{room.id}}">Usun</td>
+    <td><a href="/room/reserve/{{room.id}}">Zarezerwuj</td>
+  </tr>
+</table>
+<br><br>
+<ul>
+  {% for res in reservations %}
+    <li>
+      <h3>{{res.date}}</h3>
+      <p>{{res.comment}}</p>
+    </li>
+  {% endfor %}
+</ul>

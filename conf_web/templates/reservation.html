@@ -12,4 +12,13 @@
     <label>
     <input type="submit" value="Dodaj">
     </label>
+
+    <ul>
+      {% for res in reservations %}
+        <li>
+          <h3>{{res.date}}</h3>
+          <p>{{res.comment}}</p>
+        </li>
+      {% endfor %}
+    </ul>
 </form>

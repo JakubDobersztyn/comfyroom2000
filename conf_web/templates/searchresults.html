@@ -2,7 +2,9 @@
 {{info}}
 {% endif %}
 
-
+{% if rooms %}
+<br><br>
+<h3>Wyszukane sale:</h3>
 <table>
     <tr><th>ID</th><th>Nazwa sali</th><th>Projektor</th><th>Dostępność</th></tr>
   {% for room in rooms %}
@@ -25,6 +27,10 @@
       </tr>
   {% endfor %}
 </table>
+{% else %}
+<br><br>
+<p style="color: red">Brak wolnych sal dla podanych kryteriów wyszukiwania</p>
+{% endif %}
 <br><br>
 <h3 style="margin-left: 10%">Szukaj sal:</h3>
 <form action="/search" method="GET">

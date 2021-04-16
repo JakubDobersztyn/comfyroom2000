@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
-from conf_web.views import AddRooms, AllRooms, DelRoom, ModRoom, Reservation
+from conf_web.views import AddRooms, AllRooms, DelRoom, ModRoom, Reservation, RoomDetails, Search
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,8 @@ urlpatterns = [
     path('room/delete/<int:room_id>', DelRoom.as_view()),
     path('room/modify/<int:room_id>', ModRoom.as_view()),
     path('room/reserve/<int:room_id>', Reservation.as_view()),
+    path('room/details/<int:room_id>', RoomDetails.as_view()),
+    path('search/', Search.as_view()),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
