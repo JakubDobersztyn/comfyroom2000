@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <title>Conferences room rental</title>
+</head>
+<body>
+<header>
+    <div class="container">
+        <img src="{% static 'css/logo.png' %}" alt="logo" class="logo">
+      <nav>
+        <ul>
+          <li><a href="/all-rooms">room list</a></li>
+          <li><a href="/add-rooms">add room</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+<middle>
+    {% include middle %}
+</middle>
+
+<footer>
+    <div class="container">
+        <a href="mailto:jakub.dobersztyn@gmail.com">autor: @Jakub Dobersztyn</a>
+    </div>
+</body>
+</html>

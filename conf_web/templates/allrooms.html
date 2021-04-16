@@ -1,0 +1,21 @@
+{% if info %}
+{{info}}
+{% endif %}
+<table>
+    <tr><th>ID</th><th>Nazwa sali</th><th>Projektor</th><th>Dostępność</th></tr>
+  {% for room in rooms %}
+      <tr>
+          <td>{{room.id}}</td>
+          <td><a href="/all-rooms/{{room.id}}">{{room.room_name}}</a></td>
+          {% if room.projector == True %}
+          <td>Dostępny</td>
+          {% else %}
+          <td>Niedostępny</td>
+          {% endif %}
+          <td></td>
+          <td><a href="/room/modify/{{room.id}}">Edytuj</td>
+          <td><a href="/room/delete/{{room.id}}">Usun</td>
+          <td><a href="/room/reserve/{{room.id}}">Zarezerwuj</td>
+      </tr>
+  {% endfor %}
+</table>

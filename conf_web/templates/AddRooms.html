@@ -1,0 +1,21 @@
+
+
+{% if error %}
+<br><p style="color: red"> {{ error }}</p>
+{% endif %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <label>Nazwa sali:<br>
+        <input type="text" name="room_name" placeholder="Wpisz nazwę sali">
+    </label><br>
+    <label>Pojemnosc sali:<br>
+        <input type="number" name="room_cap" value="1">
+    </label><br>
+    <label>
+      Dostępność rzutnika
+      <input type="checkbox" name="projector">
+    </label>
+    <label>
+    <input type="submit" value="Dodaj">
+    </label>
+</form>

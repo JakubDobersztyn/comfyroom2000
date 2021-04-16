@@ -14,8 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
+
+from conf_web.views import AddRooms, AllRooms, DelRoom, ModRoom, Reservation
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('add-rooms', AddRooms.as_view()),
+    path('all-rooms', AllRooms.as_view(), name="all-rooms"),
+    path('room/delete/<int:room_id>', DelRoom.as_view()),
+    path('room/modify/<int:room_id>', ModRoom.as_view()),
+    path('room/reserve/<int:room_id>', Reservation.as_view()),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

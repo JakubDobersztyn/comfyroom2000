@@ -1,0 +1,15 @@
+{% if error %}
+<br><p style="color: red"> {{ error }}</p>
+{% endif %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <label>Data:<br>
+        <input type="date" name="date">
+    </label><br>
+    <label>Komentarz:<br>
+        <input type="text" name="comment" placeholder="Dodaj komentarz">
+    </label><br>
+    <label>
+    <input type="submit" value="Dodaj">
+    </label>
+</form>
