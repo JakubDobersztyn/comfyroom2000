@@ -7,6 +7,14 @@
   </tr>
 </table>
 <br><br>
+<h2>Nazwa sali: {{ room.room_name }}</h2>
+<p>Pojemność sali: {{ room.room_cap }}</p>
+<p>Dostępność rzutnika:
+{% if room.projector %}
+  Dostępny
+{% else %}
+  Niedostępny
+{% endif %}
 <ul>
   {% for res in reservations %}
     <li>
